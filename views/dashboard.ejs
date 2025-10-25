@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(109, 180, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, rgba(15, 12, 41, 0.98) 0%, rgba(25, 20, 60, 0.98) 100%);
+            backdrop-filter: blur(20px);
+            padding: 25px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(109, 180, 255, 0.6) 25%,
+                    rgba(147, 51, 234, 0.6) 75%,
+                    transparent 100%) 1;
+            box-shadow:
+                0 8px 40px rgba(0, 0, 0, 0.8),
+                0 2px 10px rgba(109, 180, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .navbar::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(109, 180, 255, 0.8) 50%,
+                    transparent 100%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scaleX(0.8);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+        }
+
+        .navbar-brand {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6db4ff 0%, #8ea3ff 50%, #b794f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            filter: drop-shadow(0 0 20px rgba(109, 180, 255, 0.6));
+            animation: brandGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes brandGlow {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 20px rgba(109, 180, 255, 0.6));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 30px rgba(109, 180, 255, 0.9));
+            }
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 10px;
+            list-style: none;
+        }
+
+        .navbar-menu li a {
+            color: #b8c5d6;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 12px 24px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid transparent;
+        }
+
+        .navbar-menu li a:hover {
+            color: #6db4ff;
+            border-color: rgba(109, 180, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(109, 180, 255, 0.3);
+        }
+
+        .navbar-menu li a.active {
+            background: linear-gradient(135deg, rgba(109, 180, 255, 0.25), rgba(147, 51, 234, 0.25));
+            color: #6db4ff;
+            border-color: rgba(109, 180, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(109, 180, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 50px auto;
+            padding: 0 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+            gap: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: grid;
+        }
+
+        .quest-box {
+            background: linear-gradient(145deg, rgba(30, 35, 65, 0.95), rgba(20, 25, 50, 0.98));
+            border: 2px solid rgba(109, 180, 255, 0.3);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-box:hover {
+            border-color: rgba(109, 180, 255, 0.7);
+            box-shadow: 0 15px 50px rgba(109, 180, 255, 0.3);
+            transform: translateY(-8px);
+        }
+
+        .quest-box.completed {
+            border-color: rgba(72, 187, 120, 0.7);
+            background: linear-gradient(145deg, rgba(30, 50, 35, 0.95), rgba(20, 40, 25, 0.98));
+        }
+
+        .quest-box.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 48px;
+            color: rgba(72, 187, 120, 0.3);
+            font-weight: bold;
+        }
+
+        .quest-title {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6db4ff 0%, #9f7aea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(109, 180, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .progress-container {
+            margin-bottom: 25px;
+            background: rgba(20, 25, 45, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(109, 180, 255, 0.2);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #b8c5d6;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(20, 25, 45, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4a90e2, #6db4ff, #9f7aea);
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px rgba(109, 180, 255, 0.5);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(40, 45, 80, 0.6);
+            border: 2px solid rgba(109, 180, 255, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkbox-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(180deg, #6db4ff, #9f7aea);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(50, 55, 95, 0.8);
+            border-color: rgba(109, 180, 255, 0.5);
+            transform: translateX(5px);
+        }
+
+        .checkbox-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .checkbox-item.checked {
+            background: rgba(60, 70, 110, 0.8);
+            border-color: rgba(109, 180, 255, 0.6);
+        }
+
+        .checkbox-item.checked::before {
+            transform: scaleY(1);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 30px;
+            height: 30px;
+            margin-right: 18px;
+            cursor: pointer;
+            accent-color: #6db4ff;
+            flex-shrink: 0;
+        }
+
+        .checkbox-item label {
+            color: #d0d8e6;
+            font-size: 17px;
+            cursor: pointer;
+            user-select: none;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked+label {
+            color: #6db4ff;
+            font-weight: 600;
+        }
+
+        .xp-badge {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: #ff9900;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 50%, #2d6aa5 100%);
+            color: white;
+            border: 2px solid rgba(109, 180, 255, 0.3);
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #5aa0f2 0%, #4080cd 50%, #357abd 100%);
+            border-color: rgba(109, 180, 255, 0.8);
+            box-shadow: 0 10px 40px rgba(74, 144, 226, 0.7);
+            transform: translateY(-4px) scale(1.02);
+        }
+
+        .submit-btn:disabled {
+            background: linear-gradient(135deg, #2d6b3e, #235a31, #1a4425);
+            cursor: not-allowed;
+            box-shadow: 0 4px 15px rgba(45, 107, 62, 0.4);
+            opacity: 0.9;
+        }
+
+        .rank-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: rgba(40, 45, 80, 0.6);
+            border: 2px solid rgba(109, 180, 255, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .rank-number {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6db4ff 0%, #9f7aea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .rank-arrow {
+            font-size: 32px;
+            color: #6db4ff;
+            margin: 0 20px;
+        }
+
+        .rank-info {
+            flex: 1;
+        }
+
+        .rank-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #d0d8e6;
+            margin-bottom: 5px;
+        }
+
+        .rank-description {
+            font-size: 14px;
+            color: #8a95a8;
+        }
+
+        #logoutModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(30, 35, 65, 0.95), rgba(20, 25, 50, 0.98));
+            border: 2px solid rgba(109, 180, 255, 0.5);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6db4ff 0%, #9f7aea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-text {
+            font-size: 16px;
+            color: #b8c5d6;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-buttons button {
+            padding: 12px 30px;
+            border: 2px solid rgba(109, 180, 255, 0.3);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        #confirmLogoutBtn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        #cancelLogoutBtn {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px 25px;
+            }
+
+            .quest-box {
+                padding: 25px;
+            }
+        }
+
+        .rank-item.rank-current {
+            background: rgba(109, 180, 255, 0.2) !important;
+            border-color: rgba(109, 180, 255, 0.8) !important;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">⚔ Quest Dashboard</div>
+        <ul class="navbar-menu">
+            <li><a href="javascript:void(0)" data-section="quests" class="nav-link active">📜 Quests</a></li>
+            <li><a href="javascript:void(0)" data-section="home" class="nav-link">🏠 Home</a></li>
+            <li><a href="javascript:void(0)" data-section="profile" class="nav-link">👤 Profile</a></li>
+            <li><a href="javascript:void(0)" id="logoutLink" class="nav-link">👤 Log out</a></li>
+        </ul>
+    </nav>
+
+    <div id="logoutModal">
+        <div class="modal-content">
+            <div class="modal-title">Confirm Logout</div>
+            <div class="modal-text">Are you sure you want to log out?</div>
+            <div class="modal-buttons">
+                <button id="confirmLogoutBtn">Yes</button>
+                <button id="cancelLogoutBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quests Section -->
+    <div class="container section active" id="quests">
+        <div class="quest-box" id="coreQuestBox">
+            <h2 class="quest-title">⚔ Daily Core Quest</h2>
+
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Progress</span>
+                    <span id="coreProgress">0/4</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="coreProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'core')">
+                    <input type="checkbox" id="core1" name="core1">
+                    <label for="core1">⚔️ Complete <%= Core_data.pushUp %> Push Ups</label>
+                    <span class="xp-badge">
+                        <%= Core_Exp.pushUp %>XP
+                    </span>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'core')">
+                    <input type="checkbox" id="core2" name="core2">
+                    <label for="core2">⚔️ Complete <%= Core_data.squats %> Squats</label>
+                    <span class="xp-badge">
+                        <%= Core_Exp.squats %>XP
+                    </span>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'core')">
+                    <input type="checkbox" id="core3" name="core3">
+                    <label for="core3">💪 Complete <%= Core_data.core %> Core Training</label>
+                    <span class="xp-badge">
+                        <%= Core_Exp.core %>XP
+                    </span>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'core')">
+                    <input type="checkbox" id="core4" name="core4">
+                    <label for="core4">🛡️ Complete <%= Core_data.plank %> Minutes Plank</label>
+                    <span class="xp-badge">
+                        <%= Core_Exp.plank %>XP
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="coreSubmit" onclick="submitQuest(event, 'core')">Submit
+                Quest</button>
+        </div>
+
+        <div class="quest-box" id="eyeQuestBox">
+            <h2 class="quest-title">👁 Daily Eye Quest</h2>
+
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Progress</span>
+                    <span id="eyeProgress">0/4</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="eyeProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'eye')">
+                    <input type="checkbox" id="eye1" name="eye1">
+                    <label for="eye1">🗺️ Rotate Eyes For <%= Eye_data.RotateEyes %> Times</label>
+                    <span class="xp-badge">
+                        <%= Eye_Exp.RotateEyes %>XP
+                    </span>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'eye')">
+                    <input type="checkbox" id="eye2" name="eye2">
+                    <label for="eye2">🎯 Focus Far and Near for <%= Eye_data.focusFarAndNear %> Times</label>
+                    <span class="xp-badge">
+                        <%= Eye_Exp.focusFarAndNear %>XP
+                    </span>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'eye')">
+                    <input type="checkbox" id="eye3" name="eye3">
+                    <label for="eye3">💎 Focus on Nose and Forehead for <%= Eye_data.FocusOnNoseAndForehead %>
+                            Times</label>
+                    <span class="xp-badge">
+                        <%= Eye_Exp.FocusOnNoseAndForehead %>XP
+                    </span>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this, 'eye')">
+                    <input type="checkbox" id="eye4" name="eye4">
+                    <label for="eye4">🔍 Rub Hands For <%= Eye_data.RubHand %> Times</label>
+                    <span class="xp-badge">
+                        <%= Eye_Exp.RubHand %>XP
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="eyeSubmit" onclick="submitQuest(event, 'eye')">Submit
+                Quest</button>
+        </div>
+    </div>
+
+    <!-- Home Section -->
+    <div class="container section" id="home">
+        <div class="quest-box">
+            <h2 class="quest-title">🏆 Core Rank Progression</h2>
+            <div class="rank-list">
+                <div class="rank-item">
+                    <div class="rank-number">E Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Novice Warrior</div>
+                        <div class="rank-description">Begin your journey with basic training</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">D Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Apprentice Fighter</div>
+                        <div class="rank-description">Develop fundamental combat skills</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">C Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Skilled Combatant</div>
+                        <div class="rank-description">Master intermediate techniques</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">B Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Veteran Soldier</div>
+                        <div class="rank-description">Gain recognition through battles</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">A Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Elite Guardian</div>
+                        <div class="rank-description">Protect the realm with honor</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Hunter</div>
+                        <div class="rank-description">Command the shadows</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S1</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Sovereign I</div>
+                        <div class="rank-description">First tier of shadow mastery</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S2</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Sovereign II</div>
+                        <div class="rank-description">Second tier of shadow mastery</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S3</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Sovereign III</div>
+                        <div class="rank-description">Third tier of shadow mastery</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">MONARCH</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Monarch</div>
+                        <div class="rank-description">Supreme ruler of shadows</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="quest-box">
+            <h2 class="quest-title">👁️ Eye Rank Progression</h2>
+            <div class="rank-list">
+                <div class="rank-item">
+                    <div class="rank-number">E Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Novice Scout</div>
+                        <div class="rank-description">Begin your journey of perception</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">D Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Observer</div>
+                        <div class="rank-description">Sharpen your senses</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">C Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Tracker</div>
+                        <div class="rank-description">Follow trails invisible to others</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">B Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Visionary</div>
+                        <div class="rank-description">See beyond the present</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">A Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Oracle</div>
+                        <div class="rank-description">Perceive hidden truths</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S Rank</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Seer</div>
+                        <div class="rank-description">Master of foresight</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S1</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Sight I</div>
+                        <div class="rank-description">First tier of shadow vision</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S2</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Sight II</div>
+                        <div class="rank-description">Second tier of shadow vision</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">S3</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Sight III</div>
+                        <div class="rank-description">Third tier of shadow vision</div>
+                    </div>
+                </div>
+                <div class="rank-item">
+                    <div class="rank-number">SHADOW EYE</div>
+                    <div class="rank-arrow">→</div>
+                    <div class="rank-info">
+                        <div class="rank-name">Shadow Eye</div>
+                        <div class="rank-description">See through all dimensions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Profile Section -->
+    <div class="container section" id="profile">
+        <!-- Shadow Core Rank -->
+        <div class="quest-box">
+            <h2 class="quest-title">🔥 Shadow Core Rank</h2>
+
+            <div
+                style="background: rgba(40, 45, 80, 0.6); border: 2px solid rgba(109, 180, 255, 0.3); border-radius: 12px; padding: 25px; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <div
+                            style="font-size: 14px; color: #8a95a8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                            Current Rank</div>
+                        <div
+                            style="font-size: 32px; font-weight: bold; background: linear-gradient(135deg, #6db4ff 0%, #9f7aea 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            <%= Core_data && Core_data.currentRank ? Core_data.currentRank : 'E' %>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div
+                            style="font-size: 14px; color: #8a95a8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                            Current XP</div>
+                        <div style="font-size: 28px; font-weight: bold; color: #ff9900;">
+                            <%= Core_data && Core_data.currentXP ? Core_data.currentXP : 0 %> XP
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    style="background: rgba(20, 25, 45, 0.9); border-radius: 10px; padding: 10px; border: 1px solid rgba(109, 180, 255, 0.2);">
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #b8c5d6; font-size: 12px;">
+                        <span>
+                            <%= Core_data ? (Core_data.currentXP || 0) : 0 %> / <%= Core_data ? (Core_data.xpForNextRank
+                                    || 1) : 1 %> XP
+                        </span>
+                        <span>
+                            <%= Core_data && Core_data.xpForNextRank ? Math.round((Core_data.currentXP /
+                                Core_data.xpForNextRank) * 100) : 0 %>%
+                        </span>
+                    </div>
+                    <div
+                        style="width: 100%; height: 8px; background: rgba(20, 25, 45, 0.9); border-radius: 10px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);">
+                        <div class="progress-fill" id="coreProfileProgress"
+                            data-current="<%= Core_data && Core_data.currentXP ? Core_data.currentXP : 0 %>"
+                            data-next="<%= Core_data && Core_data.xpForNextRank ? Core_data.xpForNextRank : 1 %>"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3
+                style="font-size: 18px; color: #d0d8e6; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+                Rank Progression</h3>
+            <div class="rank-list">
+                <% var coreCurrentRank=Core_data && Core_data.currentRank ? Core_data.currentRank : '' ; %>
+
+                    <div class="rank-item <%= coreCurrentRank === 'E' ? 'rank-current' : '' %>">
+                        <div class="rank-number">E Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Novice Warrior</div>
+                            <div class="rank-description">Begin your journey with basic training</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'D' ? 'rank-current' : '' %>">
+                        <div class="rank-number">D Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Apprentice Fighter</div>
+                            <div class="rank-description">Develop fundamental combat skills</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'C' ? 'rank-current' : '' %>">
+                        <div class="rank-number">C Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Skilled Combatant</div>
+                            <div class="rank-description">Master intermediate techniques</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'B' ? 'rank-current' : '' %>">
+                        <div class="rank-number">B Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Veteran Soldier</div>
+                            <div class="rank-description">Gain recognition through battles</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'A' ? 'rank-current' : '' %>">
+                        <div class="rank-number">A Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Elite Guardian</div>
+                            <div class="rank-description">Protect the realm with honor</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'S' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Hunter</div>
+                            <div class="rank-description">Command the shadows</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'S1' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S1</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Sovereign I</div>
+                            <div class="rank-description">First tier of shadow mastery</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'S2' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S2</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Sovereign II</div>
+                            <div class="rank-description">Second tier of shadow mastery</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'S3' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S3</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Sovereign III</div>
+                            <div class="rank-description">Third tier of shadow mastery</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= coreCurrentRank === 'Shadow Monarch' ? 'rank-current' : '' %>">
+                        <div class="rank-number">MONARCH</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Monarch</div>
+                            <div class="rank-description">Supreme ruler of shadows</div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <!-- Shadow Eye Rank -->
+        <div class="quest-box">
+            <h2 class="quest-title">👁️ Shadow Eye Rank</h2>
+
+            <div
+                style="background: rgba(40, 45, 80, 0.6); border: 2px solid rgba(109, 180, 255, 0.3); border-radius: 12px; padding: 25px; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <div
+                            style="font-size: 14px; color: #8a95a8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                            Current Rank</div>
+                        <div
+                            style="font-size: 32px; font-weight: bold; background: linear-gradient(135deg, #6db4ff 0%, #9f7aea 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            <%= Eye_data && Eye_data.currentRank ? Eye_data.currentRank : 'E' %>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div
+                            style="font-size: 14px; color: #8a95a8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                            Current XP</div>
+                        <div style="font-size: 28px; font-weight: bold; color: #ff9900;">
+                            <%= Eye_data && Eye_data.currentXP ? Eye_data.currentXP : 0 %> XP
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    style="background: rgba(20, 25, 45, 0.9); border-radius: 10px; padding: 10px; border: 1px solid rgba(109, 180, 255, 0.2);">
+                    <div
+                        style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #b8c5d6; font-size: 12px;">
+                        <span>
+                            <%= Eye_data ? (Eye_data.currentXP || 0) : 0 %> / <%= Eye_data ? (Eye_data.xpForNextRank ||
+                                    1) : 1 %> XP
+                        </span>
+                        <span>
+                            <%= Eye_data && Eye_data.xpForNextRank ? Math.round((Eye_data.currentXP /
+                                Eye_data.xpForNextRank) * 100) : 0 %>%
+                        </span>
+                    </div>
+                    <div
+                        style="width: 100%; height: 8px; background: rgba(20, 25, 45, 0.9); border-radius: 10px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);">
+                        <div class="progress-fill" id="eyeProfileProgress"
+                            data-current="<%= Eye_data && Eye_data.currentXP ? Eye_data.currentXP : 0 %>"
+                            data-next="<%= Eye_data && Eye_data.xpForNextRank ? Eye_data.xpForNextRank : 1 %>"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3
+                style="font-size: 18px; color: #d0d8e6; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+                Rank Progression</h3>
+            <div class="rank-list">
+                <% var eyeCurrentRank=Eye_data && Eye_data.currentRank ? Eye_data.currentRank : '' ; %>
+
+                    <div class="rank-item <%= eyeCurrentRank === 'E' ? 'rank-current' : '' %>">
+                        <div class="rank-number">E Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Novice Scout</div>
+                            <div class="rank-description">Begin your journey of perception</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'D' ? 'rank-current' : '' %>">
+                        <div class="rank-number">D Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Observer</div>
+                            <div class="rank-description">Sharpen your senses</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'C' ? 'rank-current' : '' %>">
+                        <div class="rank-number">C Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Tracker</div>
+                            <div class="rank-description">Follow trails invisible to others</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'B' ? 'rank-current' : '' %>">
+                        <div class="rank-number">B Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Visionary</div>
+                            <div class="rank-description">See beyond the present</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'A' ? 'rank-current' : '' %>">
+                        <div class="rank-number">A Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Oracle</div>
+                            <div class="rank-description">Perceive hidden truths</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'S' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S Rank</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Seer</div>
+                            <div class="rank-description">Master of foresight</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'S1' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S1</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Sight I</div>
+                            <div class="rank-description">First tier of shadow vision</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'S2' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S2</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Sight II</div>
+                            <div class="rank-description">Second tier of shadow vision</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'S3' ? 'rank-current' : '' %>">
+                        <div class="rank-number">S3</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Sight III</div>
+                            <div class="rank-description">Third tier of shadow vision</div>
+                        </div>
+                    </div>
+                    <div class="rank-item <%= eyeCurrentRank === 'Shadow Eye' ? 'rank-current' : '' %>">
+                        <div class="rank-number">SHADOW EYE</div>
+                        <div class="rank-arrow">→</div>
+                        <div class="rank-info">
+                            <div class="rank-name">Shadow Eye</div>
+                            <div class="rank-description">See through all dimensions</div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================
+        // 🔹 State Management
+        // ==========================
+        const questState = {
+            core: {
+                submitted: false,
+                completed: false
+            },
+            eye: {
+                submitted: false,
+                completed: false
+            }
+        };
+
+        // ==========================
+        // 🔹 Navigation functionality
+        // ==========================
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+
+                sections.forEach(section => section.classList.remove('active'));
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // ==========================
+        // 🔹 Toggle Checkbox & Save to DB
+        // ==========================
+        function toggleCheckbox(item, questType) {
+            // Prevent interaction if already submitted
+            if (questState[questType].submitted) return;
+
+            const checkbox = item.querySelector('input[type="checkbox"]');
+
+            if (checkbox.disabled) return;
+
+            checkbox.checked = !checkbox.checked;
+
+            if (checkbox.checked) {
+                checkbox.disabled = true;
+            }
+
+            saveProgressToDB(questType);
+            updateProgress(questType);
+        }
+
+        // ==========================
+        // 🔹 Update Quest Progress UI
+        // ==========================
+        function updateProgress(questType) {
+            setTimeout(() => {
+                const checkboxes = document.querySelectorAll(`input[type="checkbox"][name^="${questType}"]`);
+                const items = document.querySelectorAll(`#${questType}QuestBox .checkbox-item`);
+                const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+                const total = checkboxes.length;
+                const percentage = (checked / total) * 100;
+
+                document.getElementById(`${questType}ProgressFill`).style.width = percentage + '%';
+                document.getElementById(`${questType}Progress`).textContent = `${checked}/${total}`;
+
+                items.forEach((item, index) => {
+                    if (checkboxes[index].checked) {
+                        item.classList.add('checked');
+                    } else {
+                        item.classList.remove('checked');
+                    }
+                });
+
+                if (checked === total && !questState[questType].submitted) {
+                    completeQuestBox(questType);
+                }
+            }, 0);
+        }
+
+        // ==========================
+        // 🔹 Save Progress to Database
+        // ==========================
+        async function saveProgressToDB(questType) {
+            try {
+                const checkboxes = document.querySelectorAll(`input[type="checkbox"][name^="${questType}"]`);
+                const progress = {};
+
+                checkboxes.forEach((cb, index) => {
+                    progress[`${questType}${index + 1}`] = cb.checked;
+                });
+
+                await fetch('/saveQuestProgress', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ questType, progress })
+                });
+            } catch (err) {
+                console.error('Error saving progress:', err);
+            }
+        }
+
+        // ==========================
+        // 🔹 Mark Quest as Completed UI
+        // ==========================
+        function completeQuestBox(questType) {
+            const button = document.getElementById(`${questType}Submit`);
+            const questBox = document.getElementById(`${questType}QuestBox`);
+
+            button.disabled = false;
+            button.textContent = 'SUBMIT QUEST NOW';
+            questBox.classList.add('completed');
+        }
+
+        // ==========================
+        // 🔹 Disable Quest UI (After Submit)
+        // ==========================
+        function disableQuestBox(questType) {
+            const button = document.getElementById(`${questType}Submit`);
+            const questBox = document.getElementById(`${questType}QuestBox`);
+            const checkboxes = document.querySelectorAll(`input[type="checkbox"][name^="${questType}"]`);
+
+            button.disabled = true;
+            button.textContent = 'QUEST COMPLETED ✅';
+            questBox.classList.add('completed');
+
+            checkboxes.forEach(cb => {
+                cb.disabled = true;
+            });
+        }
+
+        // ==========================
+        // 🔹 Load Progress from Database on Page Load
+        // ==========================
+        async function loadProgressFromDB() {
+            try {
+                const response = await fetch('/getQuestProgress');
+                const data = await response.json();
+
+                // Load core quest progress
+                if (data.core) {
+                    const coreCheckboxes = document.querySelectorAll('input[name^="core"]');
+                    coreCheckboxes.forEach((cb, idx) => {
+                        const key = `core${idx + 1}`;
+                        if (data.core[key] !== undefined) {
+                            cb.checked = data.core[key];
+                            if (cb.checked) cb.disabled = true;
+                        }
+                    });
+                }
+
+                // Load eye quest progress
+                if (data.eye) {
+                    const eyeCheckboxes = document.querySelectorAll('input[name^="eye"]');
+                    eyeCheckboxes.forEach((cb, idx) => {
+                        const key = `eye${idx + 1}`;
+                        if (data.eye[key] !== undefined) {
+                            cb.checked = data.eye[key];
+                            if (cb.checked) cb.disabled = true;
+                        }
+                    });
+                }
+
+                // If tasks already completed, disable everything
+                if (data.coreCompleted) {
+                    questState.core.submitted = true;
+                    questState.core.completed = true;
+                    disableQuestBox('core');
+                }
+                if (data.eyeCompleted) {
+                    questState.eye.submitted = true;
+                    questState.eye.completed = true;
+                    disableQuestBox('eye');
+                }
+
+                updateProgress('core');
+                updateProgress('eye');
+            } catch (err) {
+                console.error('Error loading progress:', err);
+            }
+        }
+
+        // ==========================
+        // 🔹 Set Profile Progress Bars
+        // ==========================
+        function setProfileProgress() {
+            // Core progress
+            const coreProfileBar = document.getElementById('coreProfileProgress');
+            if (coreProfileBar) {
+                const current = parseFloat(coreProfileBar.dataset.current) || 0;
+                const next = parseFloat(coreProfileBar.dataset.next) || 1;
+                const coreWidth = Math.min((current / next) * 100, 100);
+                coreProfileBar.style.width = coreWidth + '%';
+            }
+
+            // Eye progress
+            const eyeProfileBar = document.getElementById('eyeProfileProgress');
+            if (eyeProfileBar) {
+                const current = parseFloat(eyeProfileBar.dataset.current) || 0;
+                const next = parseFloat(eyeProfileBar.dataset.next) || 1;
+                const eyeWidth = Math.min((current / next) * 100, 100);
+                eyeProfileBar.style.width = eyeWidth + '%';
+            }
+        }
+
+
+        // ==========================
+        // 🔹 Submit Quest Animation + DB Update
+        // ==========================
+        async function submitQuest(event, questType) {
+            event.preventDefault();
+
+            // Prevent double submission
+            if (questState[questType].submitted) {
+                console.log(`${questType} quest already submitted`);
+                return;
+            }
+
+            questState[questType].submitted = true;
+
+            const checkboxes = document.querySelectorAll(`input[type="checkbox"][name^="${questType}"]`);
+            const button = document.getElementById(`${questType}Submit`);
+            const endpoint = questType === 'core' ? '/Core_Progress' : '/Eye_Progress';
+
+            // Disable button immediately
+            button.disabled = true;
+            button.textContent = "Submitting...";
+
+            // Animate checkboxes
+            checkboxes.forEach((cb, index) => {
+                setTimeout(() => {
+                    cb.checked = true;
+                    cb.disabled = true;
+                    updateProgress(questType);
+                }, index * 150);
+            });
+
+            setTimeout(async () => {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ questType })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        questState[questType].completed = true;
+                        disableQuestBox(questType);
+                        button.textContent = questType === 'core' ? "Core Quest Completed! ✅" : "Eye Quest Completed! ✅";
+                        console.log(`${questType} Quest successful! XP: ${data.exp}, Rank: ${data.rank}`);
+                    } else {
+                        const errText = await response.text();
+                        console.error("Error:", errText);
+                        alert("Error submitting quest: " + errText);
+
+                        // Reset state on error
+                        questState[questType].submitted = false;
+                        button.disabled = false;
+                        button.textContent = "Submit Quest";
+                    }
+                } catch (err) {
+                    console.error("Server error:", err);
+                    alert("Server error: " + err.message);
+
+                    // Reset state on error
+                    questState[questType].submitted = false;
+                    button.disabled = false;
+                    button.textContent = "Submit Quest";
+                }
+            }, checkboxes.length * 150 + 100);
+        }
+
+        // ==========================
+        // 🔹 Logout Functionality
+        // ==========================
+        document.getElementById('logoutLink').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('logoutModal').style.display = 'flex';
+        });
+
+        document.getElementById('confirmLogoutBtn').addEventListener('click', function () {
+            window.location.href = '/logout';
+        });
+
+        document.getElementById('cancelLogoutBtn').addEventListener('click', function () {
+            document.getElementById('logoutModal').style.display = 'none';
+        });
+
+        document.getElementById('logoutModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+
+        // ==========================
+        // 🔹 Initialize on Page Load
+        // ==========================
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadProgressFromDB();
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current rank display
+            const currentRankDisplay = document.getElementById('currentRankDisplay');
+            if (currentRankDisplay) {
+                const rankValue = '<%= Core_data && Core_data.currentRank ? Core_data.currentRank : "E" %>';
+                currentRankDisplay.textContent = rankValue;
+            }
+
+            loadProgressFromDB();
+            setProfileProgress();
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadProgressFromDB();
+            setProfileProgress(); // Add this line
+        });
+
+    </script>
+
+</body>
