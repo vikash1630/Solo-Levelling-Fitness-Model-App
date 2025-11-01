@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - Player Registration</title>
+    <title>Log - Player Sign In</title>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="stylesheet" href="/stylesheets/output.css">
 
@@ -165,20 +165,56 @@
             color: rgba(147, 197, 253, 0.4);
         }
 
-        /* Mobile optimizations */
-        @media (max-width: 640px) {
-            .float-animation {
-                animation: none;
-            }
-            
-            .particle {
-                display: none;
+        /* Mobile Responsive Styles - Performance Optimizations */
+        @media only screen and (max-width: 640px) {
+            /* Disable all animations on mobile */
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
             }
 
+            /* Hide decorative elements */
+            .particle,
+            .grid-bg {
+                display: none !important;
+            }
+
+            /* Simplify glow effects */
+            .glow-border,
+            .pulse-glow,
+            .energy-bar {
+                box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+            }
+
+            .text-glow {
+                text-shadow: none !important;
+            }
+
+            /* Remove backdrop blur for performance */
+            .backdrop-blur-sm {
+                backdrop-filter: none !important;
+                background: rgba(15, 23, 42, 0.95) !important;
+            }
+
+            /* Hide energy bars */
+            .energy-bar::before {
+                display: none !important;
+            }
+
+            /* Simplify input focus */
             input:focus {
-                animation: none;
-                box-shadow: 0 0 15px rgba(59, 130, 246, 0.5),
-                            inset 0 0 10px rgba(59, 130, 246, 0.2);
+                animation: none !important;
+                box-shadow: 0 0 10px rgba(59, 130, 246, 0.4) !important;
+            }
+
+            /* Simplify button hover */
+            input[type="submit"]:hover {
+                transform: none !important;
+            }
+
+            /* Remove link transitions */
+            a {
+                transition: none !important;
             }
         }
     </style>
