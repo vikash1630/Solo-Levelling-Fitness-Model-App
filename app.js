@@ -458,10 +458,8 @@ app.post('/register', async (req, res) => {
         );
 
         res.cookie("token", token, { httpOnly: true });
-        return res.status(200).json({ 
-            message: "Registration successful", 
-            redirectUrl: "/login" 
-        });
+        return res.redirect("/login");
+
 
     } catch (err) {
         console.error('[ERROR] Registration:', err);

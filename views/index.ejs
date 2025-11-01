@@ -158,6 +158,79 @@
         .custom-bg {
             background: radial-gradient(ellipse at center, #0a1628 0%, #020817 70%, #000000 100%);
         }
+
+        /* Mobile Responsive Styles - Small devices only */
+        @media only screen and (max-width: 640px) {
+            body.min-h-screen {
+                padding: 1rem 0;
+            }
+
+            .w-full.max-w-4xl.px-4 {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+
+            .backdrop-blur-sm.border-2.glow-border {
+                padding: 1.5rem 1rem !important;
+            }
+
+            .flex.items-center.justify-center.gap-8.mb-10 {
+                flex-direction: column !important;
+                gap: 1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .w-20.h-20.rounded-full {
+                width: 3.5rem !important;
+                height: 3.5rem !important;
+            }
+
+            .w-20.h-20 .text-6xl {
+                font-size: 2.5rem !important;
+            }
+
+            .border-2.px-10.py-3 {
+                padding: 0.5rem 1.5rem !important;
+            }
+
+            .text-5xl.font-bold.tracking-\[0\.3em\] {
+                font-size: 1.5rem !important;
+                letter-spacing: 0.15em !important;
+            }
+
+            .text-center.space-y-4.my-12 {
+                margin-top: 2rem !important;
+                margin-bottom: 2rem !important;
+            }
+
+            .text-center.space-y-4 .text-xl {
+                font-size: 1rem !important;
+            }
+
+            .flex.justify-center.gap-6.mt-12 {
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+                margin-top: 2rem !important;
+            }
+
+            .flex.justify-center.gap-6 a {
+                width: 100% !important;
+                text-align: center !important;
+            }
+
+            .absolute.top-3.left-3.w-10.h-10,
+            .absolute.top-3.right-3.w-10.h-10,
+            .absolute.bottom-3.left-3.w-10.h-10,
+            .absolute.bottom-3.right-3.w-10.h-10 {
+                width: 1.25rem !important;
+                height: 1.25rem !important;
+            }
+
+            .absolute.-left-6.top-0,
+            .absolute.-right-6.top-0 {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center relative overflow-hidden custom-bg">

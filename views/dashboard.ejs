@@ -515,6 +515,320 @@
             background: rgba(109, 180, 255, 0.2) !important;
             border-color: rgba(109, 180, 255, 0.8) !important;
         }
+
+        /* ============================================ */
+        /* 📱 MOBILE RESPONSIVE STYLES */
+        /* ============================================ */
+
+        @media (max-width: 768px) {
+
+            /* Navbar adjustments */
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            .navbar-brand {
+                font-size: 24px;
+                letter-spacing: 2px;
+            }
+
+            .navbar-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .navbar-menu li {
+                flex: 0 0 auto;
+            }
+
+            .navbar-menu li a {
+                padding: 10px 16px;
+                font-size: 14px;
+                gap: 4px;
+            }
+
+            /* Container adjustments */
+            .container {
+                grid-template-columns: 1fr;
+                padding: 0 15px;
+                margin: 25px auto;
+                gap: 25px;
+            }
+
+            /* Quest box adjustments */
+            .quest-box {
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            .quest-box:hover {
+                transform: translateY(-4px);
+            }
+
+            .quest-box.completed::after {
+                font-size: 32px;
+                top: 10px;
+                right: 10px;
+            }
+
+            /* Quest title adjustments */
+            .quest-title {
+                font-size: 20px;
+                letter-spacing: 1px;
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+
+            /* Progress container adjustments */
+            .progress-container {
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+
+            .progress-label {
+                font-size: 12px;
+            }
+
+            .progress-bar {
+                height: 6px;
+            }
+
+            /* Checkbox group adjustments */
+            .checkbox-group {
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .checkbox-item {
+                padding: 12px 15px;
+                border-radius: 10px;
+            }
+
+            .checkbox-item:hover {
+                transform: translateX(3px);
+            }
+
+            .checkbox-item input[type="checkbox"] {
+                width: 24px;
+                height: 24px;
+                margin-right: 12px;
+            }
+
+            .checkbox-item label {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+
+            .xp-badge {
+                position: static;
+                transform: none;
+                margin-left: auto;
+                padding-left: 10px;
+                font-size: 14px;
+                flex-shrink: 0;
+            }
+
+            /* Submit button adjustments */
+            .submit-btn {
+                padding: 14px;
+                font-size: 14px;
+                letter-spacing: 1px;
+            }
+
+            .submit-btn:hover:not(:disabled) {
+                transform: translateY(-2px) scale(1.01);
+            }
+
+            /* Rank list adjustments */
+            .rank-list {
+                gap: 12px;
+            }
+
+            .rank-item {
+                padding: 15px;
+                flex-wrap: wrap;
+            }
+
+            .rank-number {
+                font-size: 24px;
+                min-width: 60px;
+            }
+
+            .rank-arrow {
+                font-size: 24px;
+                margin: 0 10px;
+            }
+
+            .rank-info {
+                flex: 1;
+                min-width: 150px;
+            }
+
+            .rank-name {
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+
+            .rank-description {
+                font-size: 12px;
+            }
+
+            /* Modal adjustments */
+            .modal-content {
+                padding: 25px;
+                width: 85%;
+                margin: 0 15px;
+            }
+
+            .modal-title {
+                font-size: 22px;
+                margin-bottom: 12px;
+            }
+
+            .modal-text {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .modal-buttons button {
+                padding: 12px 20px;
+                font-size: 14px;
+                width: 100%;
+            }
+        }
+
+        /* ============================================ */
+        /* 📱 EXTRA SMALL MOBILE (< 480px) */
+        /* ============================================ */
+
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 20px;
+                letter-spacing: 1px;
+            }
+
+            .navbar-menu li a {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .quest-box {
+                padding: 15px;
+            }
+
+            .quest-title {
+                font-size: 18px;
+            }
+
+            .checkbox-item {
+                padding: 10px 12px;
+            }
+
+            .checkbox-item label {
+                font-size: 13px;
+            }
+
+            .xp-badge {
+                font-size: 12px;
+            }
+
+            .rank-number {
+                font-size: 20px;
+                min-width: 50px;
+            }
+
+            .rank-arrow {
+                font-size: 20px;
+                margin: 0 8px;
+            }
+
+            .rank-name {
+                font-size: 14px;
+            }
+
+            .rank-description {
+                font-size: 11px;
+            }
+        }
+
+        /* ============================================ */
+        /* 📱 LANDSCAPE MODE OPTIMIZATION */
+        /* ============================================ */
+
+        @media (max-width: 768px) and (orientation: landscape) {
+            .navbar {
+                padding: 10px 15px;
+            }
+
+            .navbar-brand {
+                font-size: 18px;
+            }
+
+            .navbar-menu {
+                gap: 6px;
+            }
+
+            .navbar-menu li a {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .container {
+                margin: 15px auto;
+                gap: 20px;
+            }
+
+            .quest-box {
+                padding: 15px;
+            }
+
+            .quest-title {
+                font-size: 18px;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+        }
+
+        /* ============================================ */
+        /* 🎨 TOUCH-FRIENDLY ENHANCEMENTS */
+        /* ============================================ */
+
+        @media (max-width: 768px) {
+
+            /* Larger touch targets */
+            .checkbox-item {
+                min-height: 50px;
+            }
+
+            .submit-btn {
+                min-height: 50px;
+            }
+
+            .navbar-menu li a {
+                min-height: 44px;
+            }
+
+            /* Prevent text selection on touch */
+            .checkbox-item,
+            .submit-btn,
+            .navbar-menu li a {
+                -webkit-tap-highlight-color: rgba(109, 180, 255, 0.2);
+            }
+
+            /* Smooth scrolling */
+            html {
+                scroll-behavior: smooth;
+            }
+        }
     </style>
 </head>
 
