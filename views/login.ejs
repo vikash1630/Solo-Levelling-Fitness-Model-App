@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log - Player Sign In</title>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/stylesheets/output.css">
 
     <style>
@@ -21,13 +21,13 @@
             }
         }
 
-        @keyframes slide-in {
+        @keyframes slide-down {
             0% {
-                transform: translateY(-50px) scale(0.9);
+                transform: translateY(-100px);
                 opacity: 0;
             }
             100% {
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
                 opacity: 1;
             }
         }
@@ -41,76 +41,81 @@
             }
         }
 
-        @keyframes border-dance {
+        @keyframes border-pulse {
             0%, 100% {
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.8),
-                            0 0 40px rgba(59, 130, 246, 0.5),
-                            inset 0 0 10px rgba(59, 130, 246, 0.3);
+                border-color: rgba(59, 130, 246, 0.5);
+                box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
             }
             50% {
-                box-shadow: 0 0 35px rgba(96, 165, 250, 1),
-                            0 0 70px rgba(59, 130, 246, 0.8),
-                            inset 0 0 20px rgba(96, 165, 250, 0.5);
+                border-color: rgba(96, 165, 250, 1);
+                box-shadow: 0 0 30px rgba(96, 165, 250, 0.8);
             }
         }
 
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes text-glow {
-            0%, 100% {
-                text-shadow: 0 0 15px rgba(147, 197, 253, 1),
-                            0 0 30px rgba(59, 130, 246, 0.8),
-                            0 0 45px rgba(59, 130, 246, 0.5);
-            }
-            50% {
-                text-shadow: 0 0 25px rgba(191, 219, 254, 1),
-                            0 0 50px rgba(96, 165, 250, 1),
-                            0 0 75px rgba(59, 130, 246, 0.8);
-            }
-        }
-
-        @keyframes particle-float {
+        @keyframes rotate-slow {
             0% {
-                transform: translateY(0) translateX(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 0.8;
+                transform: rotate(0deg);
             }
             100% {
-                transform: translateY(-120px) translateX(30px);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes text-shimmer {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(147, 197, 253, 1),
+                            0 0 40px rgba(59, 130, 246, 0.8);
+            }
+            50% {
+                text-shadow: 0 0 30px rgba(191, 219, 254, 1),
+                            0 0 60px rgba(96, 165, 250, 1);
+            }
+        }
+
+        @keyframes particle-rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150px) scale(0);
                 opacity: 0;
             }
         }
 
-        @keyframes input-focus-glow {
+        @keyframes input-glow {
             0%, 100% {
-                box-shadow: 0 0 15px rgba(59, 130, 246, 0.5),
-                            inset 0 0 10px rgba(59, 130, 246, 0.2);
+                box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
             }
             50% {
-                box-shadow: 0 0 25px rgba(96, 165, 250, 0.8),
-                            inset 0 0 15px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
             }
         }
 
-        .glow-border {
-            animation: border-dance 2s ease-in-out infinite;
+        @keyframes corner-expand {
+            0%, 100% {
+                width: 24px;
+                height: 24px;
+            }
+            50% {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        .slide-down {
+            animation: slide-down 0.8s ease-out forwards;
         }
 
         .pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite;
+            animation: pulse-glow 2.5s ease-in-out infinite;
         }
 
-        .slide-in {
-            animation: slide-in 0.6s ease-out forwards;
+        .border-pulse {
+            animation: border-pulse 3s ease-in-out infinite;
         }
 
         .energy-bar {
@@ -130,34 +135,27 @@
                 rgba(191, 219, 254, 1), 
                 rgba(147, 197, 253, 1),
                 transparent);
-            animation: energy-flow 1.5s linear infinite;
+            animation: energy-flow 2s linear infinite;
         }
 
-        .float-animation {
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .text-glow {
-            animation: text-glow 2s ease-in-out infinite;
+        .text-shimmer {
+            animation: text-shimmer 2.5s ease-in-out infinite;
         }
 
         .particle {
-            animation: particle-float 4s ease-in-out infinite;
+            animation: particle-rise 5s ease-in-out infinite;
         }
 
-        .grid-bg {
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
+        .rotating-ring {
+            animation: rotate-slow 20s linear infinite;
         }
 
-        .custom-bg {
-            background: radial-gradient(ellipse at center, #0a1628 0%, #020817 70%, #000000 100%);
+        .corner-accent {
+            animation: corner-expand 2s ease-in-out infinite;
         }
 
         input:focus {
-            animation: input-focus-glow 1.5s ease-in-out infinite;
+            animation: input-glow 2s ease-in-out infinite;
             outline: none;
         }
 
@@ -165,137 +163,157 @@
             color: rgba(147, 197, 253, 0.4);
         }
 
-        /* Mobile Responsive Styles - Performance Optimizations */
+        .custom-gradient-bg {
+            background: linear-gradient(135deg, #000000 0%, #0a1628 50%, #020817 100%);
+        }
+
+        .hex-pattern {
+            background-image: 
+                radial-gradient(circle at 20px 20px, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .glass-morph {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Mobile optimizations */
         @media only screen and (max-width: 640px) {
-            /* Disable all animations on mobile */
-            *, *::before, *::after {
+            .slide-down {
                 animation: none !important;
-                transition: none !important;
             }
 
-            /* Hide decorative elements */
-            .particle,
-            .grid-bg {
+            .text-shimmer {
+                animation: none !important;
+                text-shadow: 0 0 15px rgba(147, 197, 253, 0.8) !important;
+            }
+
+            .border-pulse {
+                animation: none !important;
+                border-color: rgba(59, 130, 246, 0.6) !important;
+                box-shadow: 0 0 12px rgba(59, 130, 246, 0.4) !important;
+            }
+
+            .pulse-glow {
+                animation: none !important;
+                box-shadow: 0 0 12px rgba(59, 130, 246, 0.4) !important;
+            }
+
+            .energy-bar::before {
+                animation: none !important;
+                opacity: 0.4 !important;
+            }
+
+            .rotating-ring {
+                animation: none !important;
+            }
+
+            .corner-accent {
+                animation: none !important;
+            }
+
+            .particle {
                 display: none !important;
             }
 
-            /* Simplify glow effects */
-            .glow-border,
-            .pulse-glow,
-            .energy-bar {
-                box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
+            .hex-pattern {
+                opacity: 0.3 !important;
             }
 
-            .text-glow {
-                text-shadow: none !important;
-            }
-
-            /* Remove backdrop blur for performance */
-            .backdrop-blur-sm {
+            .glass-morph {
                 backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
                 background: rgba(15, 23, 42, 0.95) !important;
             }
 
-            /* Hide energy bars */
-            .energy-bar::before {
-                display: none !important;
-            }
-
-            /* Simplify input focus */
             input:focus {
                 animation: none !important;
-                box-shadow: 0 0 10px rgba(59, 130, 246, 0.4) !important;
-            }
-
-            /* Simplify button hover */
-            input[type="submit"]:hover {
-                transform: none !important;
-            }
-
-            /* Remove link transitions */
-            a {
-                transition: none !important;
+                box-shadow: 0 0 8px rgba(59, 130, 246, 0.4) !important;
             }
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center relative overflow-hidden custom-bg">
+<body class="min-h-screen flex items-center justify-center relative overflow-hidden custom-gradient-bg">
     
-    <!-- Background Grid -->
-    <div class="absolute inset-0 grid-bg"></div>
+    <!-- Hex Pattern Background -->
+    <div class="absolute inset-0 hex-pattern"></div>
+    
+    <!-- Rotating Ring Background -->
+    <div class="absolute inset-0 flex items-center justify-center opacity-10">
+        <div class="w-[600px] h-[600px] border-4 border-blue-500 rounded-full rotating-ring"></div>
+    </div>
     
     <!-- Floating Particles -->
-    <div class="absolute top-1/4 left-1/4 w-3 h-3 bg-blue-400 rounded-full particle blur-sm" style="animation-delay: 0s;"></div>
-    <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-blue-300 rounded-full particle blur-sm" style="animation-delay: 1s;"></div>
-    <div class="absolute bottom-1/3 left-1/3 w-3 h-3 bg-blue-400 rounded-full particle blur-sm" style="animation-delay: 2s;"></div>
-    <div class="absolute top-1/2 right-1/3 w-2 h-2 bg-sky-400 rounded-full particle blur-sm" style="animation-delay: 1.5s;"></div>
-    <div class="absolute bottom-1/4 right-1/2 w-2 h-2 bg-blue-300 rounded-full particle blur-sm" style="animation-delay: 0.5s;"></div>
+    <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400 rounded-full particle" style="animation-delay: 0s;"></div>
+    <div class="absolute top-1/3 right-1/4 w-3 h-3 bg-blue-300 rounded-full particle" style="animation-delay: 1.5s;"></div>
+    <div class="absolute bottom-1/3 left-1/3 w-2 h-2 bg-sky-400 rounded-full particle" style="animation-delay: 3s;"></div>
+    <div class="absolute top-1/2 right-1/3 w-3 h-3 bg-blue-400 rounded-full particle" style="animation-delay: 2s;"></div>
+    <div class="absolute bottom-1/4 right-1/2 w-2 h-2 bg-blue-300 rounded-full particle" style="animation-delay: 4s;"></div>
 
     <!-- Main Container -->
-    <div class="w-full max-w-6xl px-3 sm:px-4 slide-in float-animation py-4 sm:py-8">
+    <div class="w-full max-w-5xl px-4 sm:px-6 py-6 sm:py-10 slide-down">
         
         <!-- Top Energy Bar -->
-        <div class="energy-bar h-1.5 sm:h-2 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full mb-3 sm:mb-4 pulse-glow" style="box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);"></div>
+        <div class="energy-bar h-1 sm:h-1.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full mb-6 sm:mb-8 pulse-glow"></div>
         
         <!-- Sign In Card -->
         <div class="relative">
-            <!-- Side Energy Bars - Hidden on mobile -->
-            <div class="hidden sm:block absolute -left-6 top-0 bottom-0 w-1.5 energy-bar bg-gradient-to-b from-transparent via-blue-500 to-transparent" style="box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);"></div>
-            <div class="hidden sm:block absolute -right-6 top-0 bottom-0 w-1.5 energy-bar bg-gradient-to-b from-transparent via-blue-500 to-transparent" style="box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);"></div>
             
             <!-- Main Card -->
-            <div class="backdrop-blur-sm border-2 glow-border relative overflow-hidden rounded-lg p-5 sm:p-8 md:p-10" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.5) 50%, rgba(15, 23, 42, 0.7) 100%); border-color: rgba(96, 165, 250, 0.8);">
+            <div class="glass-morph border-2 border-pulse relative overflow-hidden rounded-2xl p-6 sm:p-10 md:p-12 shadow-2xl">
                 
-                <!-- Background Overlay Effects -->
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-blue-900/20"></div>
-                <div class="absolute inset-0" style="background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 70%);"></div>
+                <!-- Diagonal Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-transparent to-blue-600/10 pointer-events-none"></div>
                 
                 <!-- Content -->
                 <div class="relative z-10">
                     <!-- Header -->
-                    <div class="text-center mb-5 sm:mb-6">
-                        <div class="border-2 inline-block px-4 sm:px-6 md:px-8 py-1.5 sm:py-2 rounded mb-3 sm:mb-4" style="border-color: rgba(147, 197, 253, 0.8); box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), inset 0 0 15px rgba(59, 130, 246, 0.2);">
-                            <h1 class="text-lg sm:text-2xl md:text-3xl font-bold tracking-wider sm:tracking-[0.2em] text-glow" style="color: #93c5fd;">WELCOME BACK PLAYER</h1>
+                    <div class="text-center mb-8 sm:mb-10">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <div class="h-px w-12 sm:w-20 bg-gradient-to-r from-transparent to-blue-400"></div>
+                            <h1 class="text-xl sm:text-3xl md:text-4xl font-black tracking-widest text-shimmer mx-4 sm:mx-6" style="color: #93c5fd;">
+                                PLAYER ACCESS
+                            </h1>
+                            <div class="h-px w-12 sm:w-20 bg-gradient-to-l from-transparent to-blue-400"></div>
                         </div>
-                        <p class="text-xs sm:text-sm md:text-base px-2" style="color: rgba(191, 219, 254, 0.9);">
-                            Enter your details to continue your journey
+                        <p class="text-xs sm:text-sm md:text-base text-blue-200/80 font-light tracking-wide">
+                            AUTHENTICATE TO CONTINUE YOUR MISSION
                         </p>
                     </div>
                     
                     <!-- Form -->
-                    <form class="space-y-0" method="post" action="/loggedin">
-                        <!-- Responsive Layout -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 md:gap-x-8 gap-y-3 sm:gap-y-4">
-                                
-                            <!-- Email Input -->
-                            <div>
-                                <label class="block text-xs sm:text-sm font-bold mb-1 sm:mb-1.5" style="color: rgba(191, 219, 254, 0.9);">
-                                    EMAIL
-                                </label>
-                                <input 
-                                    type="email" 
-                                    name="email" 
-                                    placeholder="Enter your email"
-                                    required
-                                    class="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border-2 transition-all duration-300"
-                                    style="background: rgba(15, 23, 42, 0.8); color: #bfdbfe; border-color: rgba(96, 165, 250, 0.6);"
-                                />
-                            </div>
+                    <form class="space-y-6 sm:space-y-8 max-w-2xl mx-auto" method="post" action="/loggedin">
+                        
+                        <!-- Email Input -->
+                        <div class="relative">
+                            <label class="block text-xs sm:text-sm font-bold mb-2 tracking-wider text-blue-200/90 uppercase">
+                                Email Address
+                            </label>
+                            <input 
+                                type="email" 
+                                name="email" 
+                                placeholder="player@domain.com"
+                                required
+                                class="w-full px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base rounded-xl border-2 transition-all duration-300 bg-slate-900/60 text-blue-100 border-blue-500/40 focus:border-blue-400"
+                            />
+                            <div class="absolute top-0 right-0 w-2 h-2 bg-blue-400 rounded-full pulse-glow"></div>
+                        </div>
 
-                            <!-- Password Input -->
-                            <div>
-                                <label class="block text-xs sm:text-sm font-bold mb-1 sm:mb-1.5" style="color: rgba(191, 219, 254, 0.9);">
-                                    PASSWORD
-                                </label>
-                                <input 
-                                    type="password" 
-                                    name="password" 
-                                    placeholder="Enter your password"
-                                    required
-                                    class="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border-2 transition-all duration-300"
-                                    style="background: rgba(15, 23, 42, 0.8); color: #bfdbfe; border-color: rgba(96, 165, 250, 0.6);"
-                                />
-                            </div>
+                        <!-- Password Input -->
+                        <div class="relative">
+                            <label class="block text-xs sm:text-sm font-bold mb-2 tracking-wider text-blue-200/90 uppercase">
+                                Access Code
+                            </label>
+                            <input 
+                                type="password" 
+                                name="password" 
+                                placeholder="••••••••••"
+                                required
+                                class="w-full px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base rounded-xl border-2 transition-all duration-300 bg-slate-900/60 text-blue-100 border-blue-500/40 focus:border-blue-400"
+                            />
+                            <div class="absolute top-0 right-0 w-2 h-2 bg-blue-400 rounded-full pulse-glow" style="animation-delay: 0.5s;"></div>
                         </div>
 
                         <!-- Submit Button -->
@@ -303,32 +321,35 @@
                             <input
                                 value="Player Return"
                                 type="submit"
-                                class="w-full px-6 sm:px-10 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base transition-all duration-300 transform active:scale-95 sm:hover:scale-105" 
-                                style="background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); color: #ffffff; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); -webkit-tap-highlight-color: transparent;" 
+                                class="w-full px-8 sm:px-12 py-4 sm:py-5 rounded-xl font-black text-sm sm:text-base tracking-widest transition-all duration-300 transform active:scale-95 sm:hover:scale-105 uppercase cursor-pointer" 
+                                style="background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); color: #ffffff; box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); -webkit-tap-highlight-color: transparent;"
                                 onmouseover="this.style.boxShadow='0 0 40px rgba(96, 165, 250, 1)'" 
-                                onmouseout="this.style.boxShadow='0 0 20px rgba(59, 130, 246, 0.5)'"
+                                onmouseout="this.style.boxShadow='0 0 30px rgba(59, 130, 246, 0.6)'"
                             >
                         </div>
 
-                        <!-- Back to Home -->
-                        <div class="text-center pt-2 sm:pt-3">
-                            <a href="/" class="text-xs sm:text-sm transition-all duration-300 hover:text-blue-300 inline-block py-2" style="color: rgba(147, 197, 253, 0.8); -webkit-tap-highlight-color: transparent;">
-                                ← New player? Go back to Home
+                        <!-- Back Link -->
+                        <div class="text-center pt-4">
+                            <a href="/" class="text-xs sm:text-sm text-blue-300/70 hover:text-blue-200 transition-colors duration-300 inline-flex items-center gap-2 uppercase tracking-wider font-semibold">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                                New Recruit? Return to Base
                             </a>
                         </div>
                     </form>
                 </div>
                 
-                <!-- Corner Accents - Smaller on mobile -->
-                <div class="absolute top-2 sm:top-3 left-2 sm:left-3 w-6 sm:w-8 h-6 sm:h-8 border-t-2 border-l-2" style="border-color: rgba(147, 197, 253, 0.8);"></div>
-                <div class="absolute top-2 sm:top-3 right-2 sm:right-3 w-6 sm:w-8 h-6 sm:h-8 border-t-2 border-r-2" style="border-color: rgba(147, 197, 253, 0.8);"></div>
-                <div class="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 w-6 sm:w-8 h-6 sm:h-8 border-b-2 border-l-2" style="border-color: rgba(147, 197, 253, 0.8);"></div>
-                <div class="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 w-6 sm:w-8 h-6 sm:h-8 border-b-2 border-r-2" style="border-color: rgba(147, 197, 253, 0.8);"></div>
+                <!-- Animated Corner Accents -->
+                <div class="absolute top-4 left-4 corner-accent border-t-4 border-l-4 border-blue-400/60 rounded-tl-lg"></div>
+                <div class="absolute top-4 right-4 corner-accent border-t-4 border-r-4 border-blue-400/60 rounded-tr-lg"></div>
+                <div class="absolute bottom-4 left-4 corner-accent border-b-4 border-l-4 border-blue-400/60 rounded-bl-lg"></div>
+                <div class="absolute bottom-4 right-4 corner-accent border-b-4 border-r-4 border-blue-400/60 rounded-br-lg"></div>
             </div>
         </div>
         
         <!-- Bottom Energy Bar -->
-        <div class="energy-bar h-1.5 sm:h-2 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full mt-3 sm:mt-4 pulse-glow" style="box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);"></div>
+        <div class="energy-bar h-1 sm:h-1.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full mt-6 sm:mt-8 pulse-glow"></div>
         
     </div>
 
