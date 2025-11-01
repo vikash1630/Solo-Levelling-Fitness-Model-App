@@ -1,10 +1,9 @@
 // models/Player.js
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-// ✅ Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/PlayerfitnessTracker')
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+
+
 
 // ✅ Define the player schema
 const playerSchema = new mongoose.Schema({
